@@ -3,11 +3,28 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const sequelize = require('./models').sequelize;
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+// test database conection (snippet from sequelize documentation: 'getting started')
+const authenticate = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+}
+
+authenticate();
+sequelize.sync();
+
+// serve static files
+app.use('/static', express.static(path.join(__dirname, 'public')));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
