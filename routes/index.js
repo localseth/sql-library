@@ -1,21 +1,73 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const Book = require('../models').Book;
 
-/* GET home page. */
-router.get('/', async function(req, res, next) {
+function asyncHandler(cb){
+  return async(req, res, next) => {
+    try {
+      await cb(req, res, next);
+    } catch(error){
+      // Forward error to the global error handler
+      next(error);
+    }
+  }
+}
+
+/* GET home page */
+router.get('/', asyncHandler( async (req, res, next) => {
   res.redirect('books');
   // res.json(allBooks);
   // res.render('index', { title: 'Express' });
-});
+}));
 
-router.get('/books', async function(req, res, next) {
+/* GET books page */
+router.get('/books', asyncHandler( async (req, res, next) => {
   const allBooks = await Book.findAll();
   res.render('books', { allBooks, title: 'Books' })
-});
+}));
 
-router.get('/books/new', async function (req, res, next) {
-  res.render('new');
-})
+/* GET new book form */
+router.get('books/new', asyncHandler( async (req, res, next) => {
+  res.render('new-book', { book: {}, title: "Add a Book" });
+}));
+
+router.get('/books/:id', asyncHandler( async (req, res, next) => {
+  const book = await Book.findByPk(req.params.id);
+  // if (req.params.id === 'new') {
+  //   next();
+  // }
+  if (book) {
+    res.render('update-book', { book, title: book.title });
+  } else {
+    err = new Error();
+    err.status = 404;
+    err.message = 'Page not found';
+    message = `There is no entry for a book with the id: ${req.params.id}`
+    next(err);
+  }
+}))
+
+router.post('/books/:id', asyncHandler( async (req, res, next) => {
+  const book = await Book.findByPk(req.params.id);
+  if(book){
+    await book.update(req.body);
+    res.redirect('/');
+  }
+}));
+
+/* POST new book */
+router.post('books/new', asyncHandler( async (req, res) => {
+  let book;
+  try {
+    book = await Book.create(req.body);
+    res.redirect('/books');
+  } catch (error) {
+    if(error.name === 'SequelizeValidationError') {
+      res.render('books/new', { book, errors: error.errors, title: 'New Book' });
+    } else {
+      throw error;
+    }
+  }
+}));
 
 module.exports = router;

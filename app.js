@@ -45,6 +45,7 @@ app.use(function(req, res, next) {
   const err = new Error();
   err.status = 404;
   err.message = 'Page not found';
+  message = "Sorry! We couldn't find the page you were looking for";
   console.log(err.message);
   res.render('page-not-found', { err, title: 'Page not Found' });
 });
@@ -54,8 +55,9 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+  console.log('Global error handler called')
   if (err.status === 404) {
-    res.render('page-not-found', { err, title: 'Page not Found' });
+    res.render('page-not-found', { err, message, title: 'Page not Found' });
   } else {
     if (!err.status) {
       err.status = 500;
