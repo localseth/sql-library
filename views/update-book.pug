@@ -3,7 +3,7 @@ extends layout
 block content
 
   h1= book.title
-  form(action='/', method='post')
+  form(action=`/books/${book.id}`, method='post')
     p
       label(for='title') Title
       input#title(name='title' type='text' value= book.title)
