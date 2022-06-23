@@ -33,7 +33,18 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     genre: DataTypes.STRING,
-    year: DataTypes.INTEGER
+    year: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'A value for "Year" is required'
+        },
+        isInt: {
+          msg: 'An integer is required for the value "Year"'
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Book',
