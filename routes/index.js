@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Book = require('../models').Book;
+const { Op } = require('sequelize');
 
 function asyncHandler(cb){
   return async(req, res, next) => {
@@ -22,9 +23,26 @@ router.get('/', asyncHandler( async (req, res, next) => {
 
 /* GET books page */
 router.get('/books', asyncHandler( async (req, res, next) => {
-  const allBooks = await Book.findAll();
-  console.log(req.params);
-  res.render('books', { allBooks, title: 'Books' })
+  if (req.query.search !== /w*/g && Object.keys(req.query).length) {
+    let { search } = req.query;
+    const allBooks = await Book.findAll({
+      where: {
+        [Op.or]: [
+          {author: {[Op.like]: `%${search}%`}},
+          {title: {[Op.like]: `%${search}%`}},
+          {genre: {[Op.like]: `%${search}%`}},
+          {year: {[Op.like]: `%${search}%`}}
+        ]
+      },
+    });
+    const jsonBooks = allBooks.map(book => book.toJSON());
+    res.render('books', { allBooks, title: `Books matching the search '${search}`, search, jsonBooks });
+  } else {
+    const allBooks = await Book.findAll({limit: 10, offset: 1});
+    const jsonBooks = allBooks.map(book => book.toJSON());
+    console.log('length of jsonBooks: ', jsonBooks.length);
+    res.render('books', { allBooks, title: 'Books', jsonBooks })
+  }
 }));
 
 /* GET new book form */
