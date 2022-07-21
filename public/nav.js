@@ -23,14 +23,14 @@ if (nav.length > 0) {
 
     // button for navigating one page back
     if (parseInt(page) === 1 || !page) {
-        navBlock[0].insertAdjacentHTML('afterbegin', '<p><</p>');
+        navBlock[0].insertAdjacentHTML('afterbegin', '<p class="inactive"><</p>');
     } else {
         navBlock[0].insertAdjacentHTML('afterbegin', navBackHTML);
     };
 
     // button for navigating one page forward
     if (parseInt(page) === parseInt(nav[nav.length-1].innerText)) {
-        navBlock[0].insertAdjacentHTML('beforeend', '<p>></p>');
+        navBlock[0].insertAdjacentHTML('beforeend', '<p class="inactive">></p>');
     } else {
         navBlock[0].insertAdjacentHTML('beforeend', navForwardHTML);
     };

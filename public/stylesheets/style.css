@@ -158,6 +158,7 @@ input[type=text] {
   color: white;
   height: 1.5rem;
   width: 1.5rem;
+  border-radius: 2px;
 }
 
 .nav a:hover {
@@ -167,5 +168,13 @@ input[type=text] {
 
 .nav p.selected {
   background-color: #D8B493;
+}
+
+.nav p {
   font-weight: bold;
+  cursor:default;
+}
+
+.nav .inactive {
+  opacity: 0.3;
 }
