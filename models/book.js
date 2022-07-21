@@ -33,14 +33,16 @@ module.exports = (sequelize, DataTypes) => {
     genre: DataTypes.STRING,
     year: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       validate: {
-        notEmpty: {
-          msg: 'A value for "Year" is required'
-        },
-        isInt: {
-          msg: 'An integer is required for the value "Year"'
+        custom(value) {
+          if (value && !/\d+/gm.test(value)){
+            throw new Error('An integer is required for the value "year"')
+          }
         }
+        // isInt: {
+        //   msg: 'An integer is required for the value "Year"'
+        // }
       }
     }
   }, {
