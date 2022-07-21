@@ -1,3 +1,11 @@
+* {
+  box-sizing: border-box;
+}
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
 body {
   padding: 10px 50px 50px;
   font: 18px "Garamond", serif;
@@ -94,4 +102,79 @@ input[type=text] {
 
 .error {
   color: rgb(236, 15, 15);
+}
+
+.search{
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+}
+
+.search input[type='text'] {
+  outline: none;
+  margin-left: 0px;
+  margin-right: 0px;
+  border: solid 1px #e7e7e7;
+  border-right: none;
+  border-radius: 2px 0px 0px 2px;
+}
+
+.search input:active, .search input:hover, .search input:focus {
+  border-color: #019875 !important;
+}
+
+.search input.button {
+  outline: none;
+  border-radius: 0px 2px 2px 0px;
+  margin-left: 0px;
+  padding-bottom: 10px;
+}
+
+.search .button:focus {
+  background-color: #01b189;
+}
+
+.search a.button {
+  margin: 0rem 1rem;
+}
+
+/* Navigation */
+.nav {
+  height: 2.5rem;
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.nav > * {
+  text-align: center;
+  margin: 0.25rem;
+  padding: 0.125rem;
+  background-color: #019875;
+  color: white;
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 2px;
+}
+
+.nav a:hover {
+  background-color:#01b189;
+  color: white;
+}
+
+.nav p.selected {
+  background-color: #D8B493;
+}
+
+.nav p {
+  font-weight: bold;
+  cursor:default;
+}
+
+.nav .inactive {
+  opacity: 0.3;
 }

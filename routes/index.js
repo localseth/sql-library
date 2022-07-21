@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Book = require('../models').Book;
+const { Op } = require('sequelize');
+const db = require('../models/index').db;
 
 function asyncHandler(cb){
   return async(req, res, next) => {
@@ -22,9 +24,41 @@ router.get('/', asyncHandler( async (req, res, next) => {
 
 /* GET books page */
 router.get('/books', asyncHandler( async (req, res, next) => {
-  const allBooks = await Book.findAll();
-  console.log(req.params);
-  res.render('books', { allBooks, title: 'Books' })
+  // set page to 1 if query is not included in url
+  if (!req.query.page) {
+    req.query.page = 1;
+  }
+  // initiate pagination settings
+  let { search, page } = req.query;
+  let limit = 7;
+  let offset = 0;
+  offset = limit * (page - 1);
+  if (req.query.search && (!/^\s+$/g.test(req.query.search)) && req.query.search && req.query.search !== '') {
+    
+    const { count, rows } = await Book.findAndCountAll({
+      where: {
+        [Op.or]: [
+          {author: {[Op.like]: `%${search}%`}},
+          {title: {[Op.like]: `%${search}%`}},
+          {genre: {[Op.like]: `%${search}%`}},
+          {year: {[Op.like]: `%${search}%`}}
+        ]
+      },
+      offset: offset,
+      limit: limit
+    });
+    let pages = Math.ceil(count/limit);
+    console.log(Object.keys(req.query), req.query.search)
+    res.render('books', { count, rows, page, pages, title: `Search library for '${search}'`, search });
+  } else {
+    const { count, rows } = await Book.findAndCountAll({
+      offset: offset,
+      limit: limit
+    });
+    let pages = Math.ceil(count/limit);
+    console.log(rows);
+    res.render('books', { count, rows, page, pages, title: 'Books' })
+  }
 }));
 
 /* GET new book form */
