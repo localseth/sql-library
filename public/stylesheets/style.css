@@ -108,7 +108,7 @@ input[type=text] {
   box-sizing: border-box;
   display: flex;
   flex-flow: row nowrap;
-  align-items: left;
+  align-items: stretch;
 }
 
 .search input[type='text'] {
@@ -137,4 +137,35 @@ input[type=text] {
 
 .search a.button {
   margin: 0rem 1rem;
+}
+
+/* Navigation */
+.nav {
+  height: 2.5rem;
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.nav > * {
+  text-align: center;
+  margin: 0.25rem;
+  padding: 0.125rem;
+  background-color: #019875;
+  color: white;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.nav a:hover {
+  background-color:#01b189;
+  color: white;
+}
+
+.nav p.selected {
+  background-color: #D8B493;
+  font-weight: bold;
 }
