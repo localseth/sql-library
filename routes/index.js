@@ -33,7 +33,7 @@ router.get('/books', asyncHandler( async (req, res, next) => {
   let limit = 7;
   let offset = 0;
   offset = limit * (page - 1);
-  if (req.query.search && (!/\s+/g.test(req.query.search)) && req.query.search && req.query.search !== '') {
+  if (req.query.search && (!/^\s+$/g.test(req.query.search)) && req.query.search && req.query.search !== '') {
     
     const { count, rows } = await Book.findAndCountAll({
       where: {
